@@ -3,6 +3,7 @@
 import { useState, useRef, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { CameraIcon } from "lucide-react";
+import imageResize from "image-resize";
 
 function useUploadPhoto() {
   const [isLoading, startTransition] = useTransition();
@@ -12,7 +13,14 @@ function useUploadPhoto() {
     startTransition(async () => {
       const response = await fetch(photoUrl);
       const blob = await response.blob();
-      const file = new File([blob], "photo.jpg", { type: "image/jpeg" });
+      const smallPhotoBlob = await imageResize(blob, {
+        format: "jpg",
+        outputType: "blob",
+        width: 640,
+      });
+      const file = new File([smallPhotoBlob], "photo.jpg", {
+        type: "image/jpeg",
+      });
       const formData = new FormData();
       formData.append("file", file);
 
@@ -20,9 +28,16 @@ function useUploadPhoto() {
         method: "POST",
         body: formData,
       });
-      const data = await chatResponse.json();
-      console.log(data);
-      setIsSuccess(true);
+      const text = await chatResponse.text();
+      console.log(text);
+      try {
+        const data = JSON.parse(text);
+        console.log(data);
+        setIsSuccess(true);
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+        setIsSuccess(false);
+      }
     });
   };
 
@@ -87,16 +102,24 @@ export default function Home() {
 
       {uploadPhoto.isSuccess ? (
         <div className="space-y-4 text-center">
-          <p className="text-green-600 font-medium">Quiz created successfully!</p>
+          <p className="text-green-600 font-medium">
+            Quiz created successfully!
+          </p>
           <Button onClick={retakePhoto}>Take New Photo</Button>
         </div>
       ) : (
         <>
           <div className="space-y-4">
-            {!cameraEnabled && <Button onClick={startCamera}>Open Camera</Button>}
+            {!cameraEnabled && (
+              <Button onClick={startCamera}>Open Camera</Button>
+            )}
           </div>
           {photoUrl ? (
-            <img src={photoUrl} alt="Captured" className="w-full max-w-sm mt-4" />
+            <img
+              src={photoUrl}
+              alt="Captured"
+              className="w-full max-w-sm mt-4"
+            />
           ) : (
             <div className="mt-4 flex flex-col items-center">
               <video

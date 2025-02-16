@@ -9,6 +9,7 @@
         "ai": "^4.1.41",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
+        "image-resize": "^1.4.1",
         "lucide-react": "^0.475.0",
         "next": "15.1.7",
         "openai": "^4.85.1",
@@ -270,6 +271,8 @@
     "hasown": ["hasown@2.0.2", "", { "dependencies": { "function-bind": "^1.1.2" } }, "sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ=="],
 
     "humanize-ms": ["humanize-ms@1.2.1", "", { "dependencies": { "ms": "^2.0.0" } }, "sha512-Fl70vYtsAFb/C06PTS9dZBo7ihau+Tu/DNCk/OyHhea07S+aeMWpFFkUaXRa8fI+ScZbEI8dfSxwY7gxZ9SAVQ=="],
+
+    "image-resize": ["image-resize@1.4.1", "", {}, "sha512-2QQkTdMvRGkbcfeKs3OCA7g8CNRqa3ISo+8OHhMTmsHvjfaxBrvGsZ/fNTroAhh8M+9xesU4FMcoJUBMDArYzA=="],
 
     "is-arrayish": ["is-arrayish@0.3.2", "", {}, "sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ=="],
 

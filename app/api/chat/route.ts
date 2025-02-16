@@ -19,7 +19,6 @@ export async function POST(req: Request) {
   // Ask OpenAI for a streaming chat completion given the prompt
   const response = await openai.beta.chat.completions.parse({
     model: "gpt-4o",
-    max_tokens: 150,
     messages: [
       {
         role: "system",
@@ -66,7 +65,7 @@ export async function POST(req: Request) {
 
   for (const question of quiz.questions) {
     await pool.query(
-      "INSERT INTO quiz (index, question, wrong_answer_1, wrong_answer_2, wrong_answer_3, correct_answer) VALUES ($1, $2, $3, $4, $5, $6)",
+      "INSERT INTO quiz (group_id, question, wrong_answer_1, wrong_answer_2, wrong_answer_3, correct_answer) VALUES ($1, $2, $3, $4, $5, $6)",
       [
         index,
         question.question,
@@ -77,8 +76,6 @@ export async function POST(req: Request) {
       ]
     );
   }
-
-  console.log(quiz.questions);
 
   return new Response(JSON.stringify(quiz.questions), {
     headers: { "Content-Type": "application/json" },
