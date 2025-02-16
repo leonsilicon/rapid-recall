@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       {
         role: "system",
         content:
-          "You are an expert at analyzing images of handwritten or typed notes and converting them into effective multiple choice quiz questions. When given an image of notes, create 7-10 quiz questions based on the key concepts, each with 4 answer choices where only one is correct. Make the wrong choices plausible but clearly wrong to someone who understands the material.",
+          "You are an expert at analyzing images of handwritten or typed notes and converting them into effective multiple choice quiz questions. When given an image of notes, create 7 quiz questions based on the key concepts, each with 4 answer choices where only one is correct. Make the wrong choices plausible but clearly wrong to someone who understands the material.",
       },
       {
         role: "user",
