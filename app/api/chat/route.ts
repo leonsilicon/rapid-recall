@@ -61,13 +61,13 @@ export async function POST(req: Request) {
 
   const pool = await getPool();
   const { rows } = await pool.query("SELECT COUNT(*) FROM quiz");
-  const index = parseInt(rows[0].count);
+  const group_id = parseInt(rows[0].count);
 
   for (const question of quiz.questions) {
     await pool.query(
       "INSERT INTO quiz (group_id, question, wrong_answer_1, wrong_answer_2, wrong_answer_3, correct_answer) VALUES ($1, $2, $3, $4, $5, $6)",
       [
-        index,
+        group_id,
         question.question,
         question.wrong_answer_1,
         question.wrong_answer_2,

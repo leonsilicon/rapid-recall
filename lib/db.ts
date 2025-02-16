@@ -15,7 +15,7 @@ export const getPool = async () => {
     await _pool.query(`
       CREATE TABLE IF NOT EXISTS quiz (
         id SERIAL PRIMARY KEY,
-        index INTEGER NOT NULL,
+        group_id INTEGER NOT NULL,
         question TEXT NOT NULL,
         wrong_answer_1 TEXT NOT NULL,
         wrong_answer_2 TEXT NOT NULL,

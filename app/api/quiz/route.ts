@@ -2,18 +2,18 @@ import { getPool } from "@/lib/db";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const index = searchParams.get("index");
+  const groupId = searchParams.get("group_id");
 
   const pool = await getPool();
 
-  if (index) {
+  if (groupId) {
     const questions = await pool.query(
-      "SELECT * FROM quiz WHERE index = $1 ORDER BY id ASC",
-      [index]
+      "SELECT * FROM quiz WHERE group_id = $1 ORDER BY id ASC",
+      [groupId]
     );
 
     if (questions.rows.length === 0) {
-      return new Response("No quiz found with that index", { status: 404 });
+      return new Response("No quiz found with that group_id", { status: 404 });
     }
 
     return new Response(JSON.stringify(questions.rows), {
@@ -22,17 +22,17 @@ export async function GET(request: Request) {
   }
 
   const { rows } = await pool.query(
-    "SELECT * FROM quiz ORDER BY index DESC, id ASC LIMIT 1"
+    "SELECT * FROM quiz ORDER BY group_id DESC, id ASC LIMIT 1"
   );
 
   if (rows.length === 0) {
     return new Response("No quizzes found", { status: 404 });
   }
 
-  const latestIndex = rows[0].index;
+  const latestGroupId = rows[0].group_id;
   const questions = await pool.query(
-    "SELECT * FROM quiz WHERE index = $1 ORDER BY id ASC",
-    [latestIndex]
+    "SELECT * FROM quiz WHERE group_id = $1 ORDER BY id ASC",
+    [latestGroupId]
   );
 
   return new Response(JSON.stringify(questions.rows), {
