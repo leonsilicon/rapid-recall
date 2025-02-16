@@ -63,6 +63,18 @@ export default function Home() {
       });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        // Set video dimensions based on stream track settings
+        const track = stream.getVideoTracks()[0];
+        const settings = track.getSettings();
+        if (settings.width && settings.height) {
+          videoRef.current.width = settings.width;
+          videoRef.current.height = settings.height;
+          // Update canvas dimensions to match video
+          if (canvasRef.current) {
+            canvasRef.current.width = settings.width;
+            canvasRef.current.height = settings.height;
+          }
+        }
       }
       setCameraEnabled(true);
     } catch (error) {
@@ -72,14 +84,21 @@ export default function Home() {
 
   const capturePhoto = () => {
     if (videoRef.current && canvasRef.current) {
+      const videoWidth = videoRef.current.videoWidth;
+      const videoHeight = videoRef.current.videoHeight;
+
+      // Set canvas size to match video dimensions
+      canvasRef.current.width = videoWidth;
+      canvasRef.current.height = videoHeight;
+
       const context = canvasRef.current.getContext("2d");
       if (context) {
         context.drawImage(
           videoRef.current,
           0,
           0,
-          canvasRef.current.width,
-          canvasRef.current.height
+          videoWidth,
+          videoHeight
         );
         const photoDataUrl = canvasRef.current.toDataURL("image/jpeg");
         setPhotoUrl(photoDataUrl);
@@ -118,7 +137,7 @@ export default function Home() {
             <img
               src={photoUrl}
               alt="Captured"
-              className="w-full max-w-sm mt-4"
+              className="w-full max-w-sm mt-4 object-contain"
             />
           ) : (
             <div className="mt-4 flex flex-col items-center">
@@ -126,13 +145,11 @@ export default function Home() {
                 ref={videoRef}
                 autoPlay
                 playsInline
-                className="w-full max-w-sm"
+                className="w-full max-w-sm object-contain"
               />
               <canvas
                 ref={canvasRef}
                 className="hidden"
-                width="640"
-                height="480"
               />
               {cameraEnabled && (
                 <div className="w-full max-w-sm bg-black flex justify-center items-center py-4">
