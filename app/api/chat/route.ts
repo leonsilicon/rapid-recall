@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       {
         role: "system",
         content:
-          "You are an expert at analyzing images of handwritten or typed notes and converting them into effective multiple choice quiz questions. When given an image of notes, create 3-5 quiz questions based on the key concepts, each with 4 answer choices where only one is correct. Make the incorrect choices plausible but clearly wrong to someone who understands the material. Format the output as a numbered list of questions with lettered answer choices (A,B,C,D). Mark the correct answer at the end of each question.",
+          "You are an expert at analyzing images of handwritten or typed notes and converting them into effective multiple choice quiz questions. When given an image of notes, create 7-10 quiz questions based on the key concepts, each with 4 answer choices where only one is correct. Make the wrong choices plausible but clearly wrong to someone who understands the material.",
       },
       {
         role: "user",
@@ -43,11 +43,10 @@ export async function POST(req: Request) {
         questions: z.array(
           z.object({
             question: z.string(),
-            answerA: z.string(),
-            answerB: z.string(),
-            answerC: z.string(),
-            answerD: z.string(),
-            correctAnswer: z.enum(["A", "B", "C", "D"]),
+            wrong_answer_1: z.string(),
+            wrong_answer_2: z.string(),
+            wrong_answer_3: z.string(),
+            correct_answer: z.string(),
           })
         ),
       }),
@@ -62,20 +61,19 @@ export async function POST(req: Request) {
   }
 
   const pool = await getPool();
-  const { rows } = await pool.query('SELECT COUNT(*) FROM quiz');
+  const { rows } = await pool.query("SELECT COUNT(*) FROM quiz");
   const index = parseInt(rows[0].count);
 
   for (const question of quiz.questions) {
     await pool.query(
-      "INSERT INTO quiz (index, question, answer_a, answer_b, answer_c, answer_d, correct_answer) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+      "INSERT INTO quiz (index, question, wrong_answer_1, wrong_answer_2, wrong_answer_3, correct_answer) VALUES ($1, $2, $3, $4, $5, $6)",
       [
         index,
         question.question,
-        question.answerA,
-        question.answerB,
-        question.answerC,
-        question.answerD,
-        question.correctAnswer,
+        question.wrong_answer_1,
+        question.wrong_answer_2,
+        question.wrong_answer_3,
+        question.correct_answer,
       ]
     );
   }

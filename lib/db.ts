@@ -17,11 +17,10 @@ export const getPool = async () => {
         id SERIAL PRIMARY KEY,
         index INTEGER NOT NULL,
         question TEXT NOT NULL,
-        answer_a TEXT NOT NULL,
-        answer_b TEXT NOT NULL,
-        answer_c TEXT NOT NULL,
-        answer_d TEXT NOT NULL,
-        correct_answer CHAR(1) NOT NULL,
+        wrong_answer_1 TEXT NOT NULL,
+        wrong_answer_2 TEXT NOT NULL,
+        wrong_answer_3 TEXT NOT NULL,
+        correct_answer TEXT NOT NULL,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
     `);
